@@ -14,8 +14,8 @@ spark = SparkSession.builder.appName("Assigment 2 Question 3").getOrCreate()
 # copy csv into /assignment2/part1/input/
 df = spark.read.option("header", True).csv(f"hdfs://{hdfs_nn}:9000/assignment2/part1/input/")
 
-array_schema = ArrayType(StringType())
-df = df.withColumn("Reviews", sf.from_json(sf.col("Reviews"), array_schema))
+schema = ArrayType(ArrayType(StringType()))
+df = df.withColumn("Reviews", sf.from_json(sf.col("Reviews"), schema))
 
 reviews_zip = df.select(
     sf.col("ID_TA"),
