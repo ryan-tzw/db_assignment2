@@ -1,5 +1,6 @@
 import sys
 from pyspark.sql import SparkSession, functions as sf
+from pyspark.sql.types import ArrayType, StringType
 
 # you may add more import if you need to
 
@@ -13,6 +14,9 @@ spark = SparkSession.builder.appName("Assigment 2 Question 3").getOrCreate()
 # copy csv into /assignment2/part1/input/
 df = spark.read.option("header", True).csv(f"hdfs://{hdfs_nn}:9000/assignment2/part1/input/")
 
+array_schema = ArrayType(StringType())
+df = df.withColumn("Reviews", sf.from_json(sf.col("Reviews"), array_schema))
+
 reviews_zip = df.select(
     sf.col("ID_TA"),
     sf.explode(
@@ -22,11 +26,6 @@ reviews_zip = df.select(
         ).alias("reviews")
     )
 )
-
-# reviews_exploded = reviews_zip.select(
-#     sf.col("ID_TA"),
-#     sf.explode("reviews")
-# )
 
 result = reviews_zip.select(
     sf.col("ID_TA"),
