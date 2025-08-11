@@ -15,10 +15,11 @@ df = spark.read.option("header", True).csv(f"hdfs://{hdfs_nn}:9000/assignment2/p
 
 df_city_cuisine = df.select(
     sf.col("City"),
-    sf.explode("Cuisine").alias("Cuisine")
+    sf.explode("Cuisine Style").alias("Cuisine")
 )
 
-df_result = df_city_cuisine.groupBy("City", "Cuisine").count()
+df_result = df_city_cuisine.groupBy("City", "Cuisine").count().orderBy("City", "Cuisine")
+
 df_result.show(10)
 
 df_result.write.option("header", True).csv(f"hdfs://{hdfs_nn}:9000/assignment2/output/question4/")
