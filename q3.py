@@ -23,8 +23,8 @@ reviews_zip = df.select(
         sf.arrays_zip(
             sf.col("Reviews").getItem(0).alias("rtext"),
             sf.col("Reviews").getItem(1).alias("rdate")
-        ).alias("reviews")
-    )
+        )
+    ).alias("reviews")
 )
 
 result = reviews_zip.select(
